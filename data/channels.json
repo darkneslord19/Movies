@@ -1,1 +1,8 @@
-
+{
+    "movies": {
+          "url": "https://ornek-cdn.com/film.m3u8",    "name": "Film Kanal",
+          "date": "2026-06-18"
+    },  "sport": {
+          "url": "https://ornek-cdn.com/sport.m3u8",    "name": "Spor Kanal",
+          "date": "2026-06-18"
+    }}
