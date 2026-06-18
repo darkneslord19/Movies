@@ -1,6 +1,7 @@
 {
   "rewrites": [
-    { "source": "/:kanal", "destination": "/api/[kanal]" }
+    { "source": "/admin", "destination": "/api/admin" },
+    { "source": "/(.*)", "destination": "/api/kanal" }
   ],
   "headers": [
     {
