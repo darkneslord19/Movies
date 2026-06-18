@@ -1,4 +1,5 @@
-
-{  "rewrites": [    { "source": "/:kanal", "destination": "/api/[kanal]" }
-]
+{
+    "rewrites": [
+          { "source": "/:kanal", "destination": "/apppi/[kanal]" }
+    ]
 }
