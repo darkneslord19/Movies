@@ -28,7 +28,8 @@ function writeData(data) {
 }
 
 module.exports = async (req, res) => {
-  console.log('📥 Admin API çağrıldı:', req.method, req.url);
+  console.log('📥 Admin API:', req.method, req.url);
+  console.log('📋 Headers:', req.headers);
   
   // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -37,17 +38,17 @@ module.exports = async (req, res) => {
   res.setHeader('Access-Control-Allow-Credentials', 'true');
 
   if (req.method === 'OPTIONS') {
-    console.log('✅ OPTIONS isteği cevaplandı');
+    console.log('✅ OPTIONS');
     return res.status(200).end();
   }
 
-  // Token kontrolü
+  // Token kontrolü - Authorization header veya query parameter
   const authHeader = req.headers.authorization || '';
-  const token = authHeader.split(' ')[1] || '';
+  const token = authHeader.startsWith('Bearer ') ? authHeader.substring(7) : authHeader || req.query.token || '';
 
-  console.log('🔑 Gelen token:', token);
+  console.log('🔑 Token:', token);
 
-  if (!token || token !== 'admin') {
+  if (token !== 'admin') {
     console.log('❌ Token geçersiz!');
     return res.status(401).json({ 
       error: 'Yetkisiz erişim',
@@ -60,16 +61,16 @@ module.exports = async (req, res) => {
   const channels = readData();
   console.log('📦 Kanal sayısı:', Object.keys(channels).length);
 
-  // GET - Tüm kanalları listele
+  // GET
   if (req.method === 'GET') {
-    console.log('📤 GET isteği');
+    console.log('📤 GET');
     return res.status(200).json(channels);
   }
 
-  // POST - Yeni kanal ekle
+  // POST
   if (req.method === 'POST') {
     const { id, url, name } = req.body || {};
-    console.log('📥 POST isteği:', { id, url, name });
+    console.log('📥 POST:', { id, url, name });
     
     if (!id || !url || !name) {
       return res.status(400).json({ error: 'id, url ve name gerekli' });
@@ -86,21 +87,19 @@ module.exports = async (req, res) => {
     };
     
     if (writeData(channels)) {
-      console.log('✅ Kanal eklendi:', id);
       return res.status(201).json({ 
         success: true,
         message: 'Eklendi', 
         channel: channels[id] 
       });
-    } else {
-      return res.status(500).json({ error: 'Veri yazma hatası' });
     }
+    return res.status(500).json({ error: 'Veri yazma hatası' });
   }
 
-  // PUT - Kanal güncelle
+  // PUT
   if (req.method === 'PUT') {
     const { id, url, name } = req.body || {};
-    console.log('📥 PUT isteği:', { id, url, name });
+    console.log('📥 PUT:', { id, url, name });
 
     if (!id) {
       return res.status(400).json({ error: 'id gerekli' });
@@ -115,21 +114,19 @@ module.exports = async (req, res) => {
     channels[id].date = new Date().toISOString().split('T')[0];
     
     if (writeData(channels)) {
-      console.log('✅ Kanal güncellendi:', id);
       return res.status(200).json({ 
         success: true,
         message: 'Güncellendi', 
         channel: channels[id] 
       });
-    } else {
-      return res.status(500).json({ error: 'Veri yazma hatası' });
     }
+    return res.status(500).json({ error: 'Veri yazma hatası' });
   }
 
-  // DELETE - Kanal sil
+  // DELETE
   if (req.method === 'DELETE') {
     const { id } = req.query;
-    console.log('📥 DELETE isteği:', id);
+    console.log('📥 DELETE:', id);
 
     if (!id) {
       return res.status(400).json({ error: 'id gerekli' });
@@ -142,14 +139,12 @@ module.exports = async (req, res) => {
     delete channels[id];
     
     if (writeData(channels)) {
-      console.log('✅ Kanal silindi:', id);
       return res.status(200).json({ 
         success: true,
         message: 'Silindi' 
       });
-    } else {
-      return res.status(500).json({ error: 'Veri yazma hatası' });
     }
+    return res.status(500).json({ error: 'Veri yazma hatası' });
   }
 
   return res.status(405).json({ error: 'Metot izin verilmiyor' });
