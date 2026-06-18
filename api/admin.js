@@ -29,7 +29,6 @@ function writeData(data) {
 
 module.exports = async (req, res) => {
   console.log('📥 Admin API:', req.method, req.url);
-  console.log('📋 Headers:', req.headers);
   
   // CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -42,17 +41,38 @@ module.exports = async (req, res) => {
     return res.status(200).end();
   }
 
-  // Token kontrolü - Authorization header veya query parameter
+  // ======= TOKEN KONTROLÜ - 3 FARKLI YERDEN DENE =======
+  let token = '';
+  
+  // 1. Authorization header'dan dene
   const authHeader = req.headers.authorization || '';
-  const token = authHeader.startsWith('Bearer ') ? authHeader.substring(7) : authHeader || req.query.token || '';
+  if (authHeader.startsWith('Bearer ')) {
+    token = authHeader.substring(7);
+  } else if (authHeader) {
+    token = authHeader;
+  }
+  
+  // 2. Query parameter'den dene
+  if (!token && req.query.token) {
+    token = req.query.token;
+  }
+  
+  // 3. Body'den dene (POST/PUT için)
+  if (!token && req.body && req.body.token) {
+    token = req.body.token;
+  }
 
   console.log('🔑 Token:', token);
+  console.log('📋 Auth Header:', authHeader);
+  console.log('📋 Query:', req.query);
 
+  // Token kontrolü - "admin" ile karşılaştır
   if (token !== 'admin') {
     console.log('❌ Token geçersiz!');
     return res.status(401).json({ 
       error: 'Yetkisiz erişim',
-      message: 'Token "admin" olmalıdır'
+      message: 'Token "admin" olmalıdır',
+      received: token || '(boş)'
     });
   }
 
