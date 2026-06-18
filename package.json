@@ -1,1 +1,10 @@
 
+{  "name": "m3u-proxy",
+    "version": "11.0.0",
+    "description": "M3U8 Proxy Manager",
+    "scripts": {    "dev": "vercel dev"
+    },
+    "dependencies": {
+          "fs": "^0.0.1-security"
+    }
+}
