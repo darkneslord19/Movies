@@ -8,5 +8,10 @@
     "url": "https://streams.uzunmuhalefet.com/lists/tr.m3u",
     "name": "Evrim",
     "date": "2026-06-18"
+  },
+  "rectv": {
+    "url": "https://mth.tc/recdizi",
+    "name": "Darkneslord",
+    "date": "2026-06-18"
   }
 }
