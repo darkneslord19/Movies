@@ -1,10 +1,16 @@
-
-{  "name": "m3u-proxy",
-    "version": "11.0.0",
-    "description": "M3U8 Proxy Manager",
-    "scripts": {    "dev": "vercel dev"
-    },
-    "dependencies": {
-          "fs": "^0.0.1-security"
-    }
+{
+  "name": "m3u-proxy",
+  "version": "1.0.0",
+  "description": "M3U8 Proxy Manager",
+  "main": "api/[kanal].js",
+  "scripts": {
+    "dev": "vercel dev",
+    "start": "node api/[kanal].js"
+  },
+  "dependencies": {
+    "fs": "^0.0.1-security"
+  },
+  "engines": {
+    "node": ">=18.x"
+  }
 }
