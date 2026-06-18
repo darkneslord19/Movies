@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
 
   try {
     const decodedUrl = decodeURIComponent(url);
-    console.log('Fetching TS:', decodedUrl);
+    console.log('📦 TS Segment:', decodedUrl.substring(0, 100));
     
     const response = await fetch(decodedUrl, {
       headers: {
