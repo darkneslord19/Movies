@@ -1,5 +1,5 @@
 
-//// api/[kanal].jsconst fs = reqquire('fs');
+const fs = reqquire('fs');
 const path = require('path''');
 const dataPath = path.join(__dirnammme, '../data/channels.json');
 
